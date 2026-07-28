@@ -34,30 +34,68 @@ askForm.addEventListener('submit', (e) => {
   setTimeout(() => (askInput.placeholder = original), 2500);
 });
 
-/* ---------- Hero cycling text ---------- */
-const heroCycle = document.getElementById('hero-cycle');
-const phrases = ['VOID STUDIO', 'DIGITAL CRAFT', 'WEB EXPERIENCES', 'INTERACTIVE ART'];
-let phraseIndex = 0;
-setInterval(() => {
-  phraseIndex = (phraseIndex + 1) % phrases.length;
-  heroCycle.style.opacity = 0;
-  setTimeout(() => {
-    heroCycle.textContent = phrases[phraseIndex];
-    heroCycle.style.opacity = 1;
-  }, 400);
-}, 3200);
-heroCycle.style.transition = 'opacity 0.4s ease';
-
-/* ---------- Work grid content ---------- */
+/* ---------- Shared project data ---------- */
+/* Replace title/tag/gradient/color with your own work — this is placeholder content. */
 const projects = [
-  { title: 'Pulse Racer', tag: 'Websites · WebGL', gradient: 'linear-gradient(135deg,#1c1f3d,#05050a)' },
-  { title: 'Harmonic State', tag: 'Installations', gradient: 'linear-gradient(135deg,#2a1c3d,#05050a)' },
-  { title: 'Deep Field', tag: 'XR / VR / AI', gradient: 'linear-gradient(135deg,#12303a,#05050a)' },
-  { title: 'Nightrunner', tag: 'Games', gradient: 'linear-gradient(135deg,#3a1c22,#05050a)' },
-  { title: 'Colony', tag: 'Multiplayer', gradient: 'linear-gradient(135deg,#1c3a2e,#05050a)' },
-  { title: 'Signal Lab', tag: 'Websites · Prototype', gradient: 'linear-gradient(135deg,#3a2f1c,#05050a)' },
+  { title: 'Aurora Drive', tag: 'Websites · WebGL', gradient: 'linear-gradient(135deg,#1c1f3d,#05050a)', color: '#7c8cff' },
+  { title: 'Glass Garden', tag: 'Installations', gradient: 'linear-gradient(135deg,#2a1c3d,#05050a)', color: '#c76cff' },
+  { title: 'Echo Chamber', tag: 'XR / VR / AI', gradient: 'linear-gradient(135deg,#12303a,#05050a)', color: '#5be3ff' },
+  { title: 'Night Signal', tag: 'Games', gradient: 'linear-gradient(135deg,#3a1c22,#05050a)', color: '#ff5c8a' },
+  { title: 'Paper Planet', tag: 'Multiplayer', gradient: 'linear-gradient(135deg,#1c3a2e,#05050a)', color: '#4fffb0' },
+  { title: 'Static Bloom', tag: 'Websites · Prototype', gradient: 'linear-gradient(135deg,#3a2f1c,#05050a)', color: '#ffd76c' },
 ];
 
+/* ---------- Hero showcase: auto-cycling glitch transition ---------- */
+const heroEl = document.getElementById('home');
+const heroTitle = document.getElementById('hero-title');
+const heroTag = document.getElementById('hero-tag');
+const heroDots = document.getElementById('hero-dots');
+
+projects.forEach((_, i) => {
+  const dot = document.createElement('span');
+  dot.className = 'dot' + (i === 0 ? ' active' : '');
+  dot.addEventListener('click', () => showProject(i, true));
+  heroDots.appendChild(dot);
+});
+
+let heroIndex = 0;
+let heroTimer;
+
+function showProject(index, userTriggered) {
+  heroIndex = index;
+  const p = projects[heroIndex];
+
+  heroTitle.classList.add('glitching');
+  heroTag.style.opacity = 0;
+
+  setTimeout(() => {
+    heroTitle.textContent = p.title;
+    heroTitle.dataset.text = p.title;
+    heroTag.textContent = p.tag;
+    heroTag.style.opacity = 1;
+    heroEl.style.setProperty('--hero-color', p.color);
+  }, 150);
+
+  setTimeout(() => heroTitle.classList.remove('glitching'), 500);
+
+  [...heroDots.children].forEach((d, i) => d.classList.toggle('active', i === heroIndex));
+
+  if (userTriggered) {
+    clearInterval(heroTimer);
+    startHeroTimer();
+  }
+}
+
+function startHeroTimer() {
+  heroTimer = setInterval(() => {
+    showProject((heroIndex + 1) % projects.length);
+  }, 3500);
+}
+
+showProject(0);
+startHeroTimer();
+
+/* ---------- Work grid content ---------- */
 const grid = document.getElementById('work-grid');
 projects.forEach((p) => {
   const card = document.createElement('article');
