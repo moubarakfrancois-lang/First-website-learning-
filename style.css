@@ -215,11 +215,11 @@ img { max-width: 100%; display: block; }
   width: 60%;
   height: 100%;
   transform: translateX(-50%);
-  background: linear-gradient(180deg, var(--accent-2), var(--accent));
+  background: linear-gradient(180deg, color-mix(in srgb, var(--wax, var(--accent-2)) 55%, #fff), var(--wax, var(--accent)));
   border-radius: 0 60% 60% 60%;
   transform-origin: bottom center;
   animation: flicker 2.6s ease-in-out infinite;
-  filter: drop-shadow(0 0 6px var(--accent));
+  filter: drop-shadow(0 0 8px var(--wax, var(--accent)));
 }
 @keyframes flicker {
   0%, 100% { transform: translateX(-50%) rotate(-6deg) scaleY(1); }
@@ -246,8 +246,15 @@ img { max-width: 100%; display: block; }
   transform: translateX(-50%);
   background: radial-gradient(circle, var(--wax, var(--accent)) 0%, transparent 70%);
   filter: blur(30px);
-  opacity: 0.55;
-  animation: glowPulse 3.4s ease-in-out infinite;
+  opacity: 0;
+}
+.jar.built .jar-glow {
+  animation: glowReveal 0.9s ease calc(1.5s + var(--jar-delay, 0ms)) forwards,
+             glowPulse 3.4s ease-in-out calc(2.4s + var(--jar-delay, 0ms)) infinite;
+}
+@keyframes glowReveal {
+  from { opacity: 0; transform: translateX(-50%) scale(0.85); }
+  to { opacity: 0.4; transform: translateX(-50%) scale(1); }
 }
 @keyframes glowPulse {
   0%, 100% { opacity: 0.4; transform: translateX(-50%) scale(1); }
@@ -267,21 +274,32 @@ img { max-width: 100%; display: block; }
   position: absolute;
   top: -6%;
   left: 50%;
-  transform: translateX(-50%);
   width: 68%;
   height: 10%;
   background: linear-gradient(180deg, #3a2c22, #1c140f);
   border-radius: 4px;
   z-index: 3;
+  opacity: 0;
+  transform: translate(-50%, -22px);
+  transition: opacity 0.5s ease calc(1.15s + var(--jar-delay, 0ms)),
+              transform 0.55s cubic-bezier(.34,1.56,.64,1) calc(1.15s + var(--jar-delay, 0ms));
+}
+.jar.built .jar-lid {
+  opacity: 1;
+  transform: translate(-50%, 0);
 }
 .jar-wax {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 62%;
+  height: 0;
   background: linear-gradient(180deg, var(--wax, var(--accent)), color-mix(in srgb, var(--wax, var(--accent)) 70%, #000));
   border-radius: 4px 4px 0 0;
+  transition: height 1.1s cubic-bezier(.22,1,.36,1) calc(0.1s + var(--jar-delay, 0ms));
+}
+.jar.built .jar-wax {
+  height: 62%;
 }
 .jar-wax::before {
   content: "";
@@ -300,19 +318,33 @@ img { max-width: 100%; display: block; }
   height: 14%;
   background: #3a2c22;
   transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.4s ease calc(1s + var(--jar-delay, 0ms));
+}
+.jar.built .jar-wick {
+  opacity: 1;
 }
 .jar .flame {
   position: absolute;
   bottom: calc(62% + 12%);
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) scale(0.15);
   z-index: 2;
   --size: 22px;
+  opacity: 0;
+  transition: opacity 0.4s ease calc(1.35s + var(--jar-delay, 0ms)),
+              transform 0.5s cubic-bezier(.34,1.56,.64,1) calc(1.35s + var(--jar-delay, 0ms));
+}
+.jar.built .flame {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
 }
 
 /* ---------- Layout ---------- */
 main { position: relative; z-index: 1; padding-top: 84px; }
 .page-section { padding: 90px var(--pad); position: relative; }
+.page-section { scroll-margin-top: 100px; }
+.section-heading { scroll-margin-top: 100px; }
 .section-heading {
   font-family: var(--serif);
   font-size: clamp(1.8rem, 3.2vw, 2.6rem);
@@ -599,6 +631,37 @@ main { position: relative; z-index: 1; padding-top: 84px; }
   gap: 10px;
   font-size: 13px;
   color: var(--muted);
+}
+
+.pd-ingredients {
+  border-top: 1px solid var(--line);
+  margin-top: 24px;
+  padding-top: 24px;
+}
+.pd-ingredients-title {
+  font-family: var(--serif);
+  font-size: 1rem;
+  margin: 0 0 14px;
+  color: var(--fg);
+}
+.ingredient-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.ingredient-tag {
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--bg-alt);
+  font-size: 12.5px;
+  color: #d6d0c8;
+  opacity: 0;
+  transform: translateY(8px);
+  animation: tagIn 0.5s ease calc(0.2s + var(--tag-delay, 0ms)) forwards;
+}
+@keyframes tagIn {
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .related-heading { font-family: var(--serif); font-size: 1.6rem; margin: 90px 0 30px; }

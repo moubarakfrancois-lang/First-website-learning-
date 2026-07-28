@@ -8,6 +8,8 @@ const PRODUCTS = [
     price: 28,
     color: '#c9762f',
     burnTime: '45 hrs',
+    ingredients: ['100% Soy Wax', 'Cotton Wick', 'Amber Accord', 'Oud Essential Oil', 'Smoked Vanilla Extract'],
+
     sizes: [
       { label: '8 oz', price: 28 },
       { label: '12 oz', price: 36 },
@@ -21,6 +23,8 @@ const PRODUCTS = [
     price: 24,
     color: '#e0b464',
     burnTime: '40 hrs',
+    ingredients: ['100% Soy Wax', 'Cotton Wick', 'Madagascar Vanilla Extract', 'Brown Sugar Accord', 'Tonka Bean Absolute'],
+
     sizes: [
       { label: '8 oz', price: 24 },
       { label: '12 oz', price: 32 },
@@ -34,6 +38,8 @@ const PRODUCTS = [
     price: 26,
     color: '#7fa9b8',
     burnTime: '42 hrs',
+    ingredients: ['100% Soy Wax', 'Cotton Wick', 'Sea Salt Accord', 'Driftwood Extract', 'Ozonic Notes'],
+
     sizes: [
       { label: '8 oz', price: 26 },
       { label: '12 oz', price: 34 },
@@ -47,6 +53,8 @@ const PRODUCTS = [
     price: 28,
     color: '#8a5a3b',
     burnTime: '45 hrs',
+    ingredients: ['100% Soy Wax', 'Cotton Wick', 'Virginia Cedarwood Oil', 'Fireside Smoke Accord', 'Sandalwood Extract'],
+
     sizes: [
       { label: '8 oz', price: 28 },
       { label: '12 oz', price: 36 },
@@ -60,6 +68,8 @@ const PRODUCTS = [
     price: 22,
     color: '#a992d1',
     burnTime: '38 hrs',
+    ingredients: ['100% Soy Wax', 'Cotton Wick', 'French Lavender Essential Oil', 'Chamomile Extract', 'White Musk'],
+
     sizes: [
       { label: '8 oz', price: 22 },
       { label: '12 oz', price: 30 },
@@ -73,6 +83,8 @@ const PRODUCTS = [
     price: 25,
     color: '#b8703f',
     burnTime: '42 hrs',
+    ingredients: ['100% Soy Wax', 'Cotton Wick', 'Cardamom Essential Oil', 'Clove Bud Oil', 'Black Tea Extract', 'Steamed Milk Accord'],
+
     sizes: [
       { label: '8 oz', price: 25 },
       { label: '12 oz', price: 33 },
@@ -86,6 +98,8 @@ const PRODUCTS = [
     price: 27,
     color: '#4f7a5c',
     burnTime: '44 hrs',
+    ingredients: ['100% Soy Wax', 'Cotton Wick', 'Fraser Fir Needle Oil', 'Frosted Pine Accord', 'Cedarwood Extract'],
+
     sizes: [
       { label: '8 oz', price: 27 },
       { label: '12 oz', price: 35 },
@@ -99,6 +113,8 @@ const PRODUCTS = [
     price: 26,
     color: '#a4632f',
     burnTime: '40 hrs',
+    ingredients: ['100% Soy Wax', 'Cotton Wick', 'Ripe Fig Accord', 'Wild Honey Extract', 'Golden Amber'],
+
     sizes: [
       { label: '8 oz', price: 26 },
       { label: '12 oz', price: 34 },
@@ -112,6 +128,8 @@ const PRODUCTS = [
     price: 30,
     color: '#5b3b52',
     burnTime: '46 hrs',
+    ingredients: ['100% Soy Wax', 'Cotton Wick', 'Black Fig Accord', 'Leather Extract', 'Dark Musk'],
+
     sizes: [
       { label: '8 oz', price: 30 },
       { label: '12 oz', price: 38 },
@@ -125,6 +143,8 @@ const PRODUCTS = [
     price: 22,
     color: '#e08a3d',
     burnTime: '38 hrs',
+    ingredients: ['100% Soy Wax', 'Cotton Wick', 'Blood Orange Essential Oil', 'Grapefruit Extract', 'Mint Leaf Oil'],
+
     sizes: [
       { label: '8 oz', price: 22 },
       { label: '12 oz', price: 30 },
@@ -138,6 +158,8 @@ const PRODUCTS = [
     price: 27,
     color: '#8b7fc7',
     burnTime: '43 hrs',
+    ingredients: ['100% Soy Wax', 'Cotton Wick', 'Night Jasmine Absolute', 'White Tea Extract', 'Soft Vanilla'],
+
     sizes: [
       { label: '8 oz', price: 27 },
       { label: '12 oz', price: 35 },
@@ -151,6 +173,8 @@ const PRODUCTS = [
     price: 23,
     color: '#e8c79a',
     burnTime: '38 hrs',
+    ingredients: ['100% Soy Wax', 'Cotton Wick', 'Toasted Sugar Accord', 'Cream Extract', 'Campfire Smoke Note'],
+
     sizes: [
       { label: '8 oz', price: 23 },
       { label: '12 oz', price: 31 },

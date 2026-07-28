@@ -38,6 +38,15 @@ function renderDetail() {
         <span>&#9679; Free shipping on orders over ${money(FREE_SHIPPING_THRESHOLD)}</span>
         <span>&#9679; Burn time: ${product.burnTime}</span>
       </div>
+
+      <div class="pd-ingredients">
+        <h3 class="pd-ingredients-title">What's Inside</h3>
+        <div class="ingredient-tags">
+          ${(product.ingredients || [])
+            .map((ing, i) => `<span class="ingredient-tag" style="--tag-delay:${i * 90}ms">${ing}</span>`)
+            .join('')}
+        </div>
+      </div>
     </div>
   `;
 
@@ -70,9 +79,9 @@ const relatedList = related.length ? related : PRODUCTS.filter((p) => p.id !== p
 
 document.getElementById('related-grid').innerHTML = relatedList
   .map(
-    (p) => `
+    (p, i) => `
     <article class="product-card" data-id="${p.id}">
-      ${renderJar(p.color)}
+      ${renderJar(p.color, { delay: i * 90 })}
       <p class="card-cat">${p.category}</p>
       <h3 class="card-name">${p.name}</h3>
       <p class="card-notes">${p.notes}</p>

@@ -2,8 +2,9 @@
 
 function renderJar(color, opts = {}) {
   const flameSize = opts.flameSize || 20;
+  const delay = opts.delay || 0;
   return `
-    <div class="jar" style="--wax:${color}">
+    <div class="jar" style="--wax:${color};--jar-delay:${delay}ms">
       <div class="jar-glow"></div>
       <div class="jar-lid"></div>
       <div class="jar-glass">
@@ -14,6 +15,51 @@ function renderJar(color, opts = {}) {
     </div>
   `;
 }
+
+/* ---------- Candle build-in animation ---------- */
+/* Every .jar starts "unbuilt" (CSS) and smoothly fills/lights up once it
+   scrolls into view. A MutationObserver catches jars injected later by
+   page scripts (product grids, cart, etc.) so no page needs to call this. */
+(function candleBuild() {
+  const jarObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('built');
+          jarObserver.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.2, rootMargin: '0px 0px -40px 0px' }
+  );
+
+  function observeNewJars(root) {
+    root.querySelectorAll('.jar:not(.built)').forEach((jar) => {
+      if (jar.dataset.observed) return;
+      jar.dataset.observed = 'true';
+      jarObserver.observe(jar);
+    });
+  }
+
+  observeNewJars(document);
+
+  const mo = new MutationObserver((mutations) => {
+    for (const m of mutations) {
+      m.addedNodes.forEach((node) => {
+        if (node.nodeType !== 1) return;
+        if (node.matches && node.matches('.jar')) {
+          if (!node.dataset.observed) {
+            node.dataset.observed = 'true';
+            jarObserver.observe(node);
+          }
+        } else if (node.querySelectorAll) {
+          observeNewJars(node);
+        }
+      });
+    }
+  });
+  mo.observe(document.body, { childList: true, subtree: true });
+})();
 
 /* ---------- Preloader ---------- */
 (function preloader() {

@@ -1,8 +1,8 @@
 /* Shop page rendering */
-function productCardHtml(p) {
+function productCardHtml(p, i) {
   return `
     <article class="product-card" data-id="${p.id}">
-      ${renderJar(p.color)}
+      ${renderJar(p.color, { delay: (i % 4) * 90 })}
       <p class="card-cat">${p.category}</p>
       <h3 class="card-name">${p.name}</h3>
       <p class="card-notes">${p.notes}</p>
@@ -62,7 +62,7 @@ renderGrid('All');
 const bundleGrid = document.getElementById('bundle-grid');
 bundleGrid.innerHTML = BUNDLES.map((b) => {
   const jars = (b.productIds || PRODUCTS.slice(0, 3).map((p) => p.id))
-    .map((id) => renderJar(getProduct(id).color, { flameSize: 14 }))
+    .map((id, i) => renderJar(getProduct(id).color, { flameSize: 14, delay: i * 120 }))
     .join('');
   const original = bundleOriginalPrice(b);
   return `
