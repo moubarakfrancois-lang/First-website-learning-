@@ -1,6 +1,6 @@
 /* Home page rendering */
 
-/* ---------- Hero smoke: colored particle plume rising from the flame ---------- */
+/* ---------- Hero smoke: colored particle atmosphere + plume rising from the flame ---------- */
 const heroSmoke = (function () {
   const canvas = document.getElementById('hero-smoke');
   const heroSection = document.querySelector('.hero');
@@ -10,6 +10,8 @@ const heroSmoke = (function () {
   let width, height, dpr;
   let particles = [];
   let smokeColor = '255,138,61';
+  let secondaryColor = '91,227,255';
+  const mouse = { x: null, y: null };
 
   function resize() {
     dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -30,45 +32,82 @@ const heroSmoke = (function () {
     return { x: fr.left + fr.width / 2 - heroRect.left, y: fr.top - heroRect.top };
   }
 
-  function spawn() {
+  function spawnPlume() {
     const p = sourcePoint();
     return {
-      x: p.x + (Math.random() - 0.5) * 16,
+      type: 'plume',
+      x: p.x + (Math.random() - 0.5) * 20,
       y: p.y,
-      vx: (Math.random() - 0.5) * 0.3,
-      vy: -(Math.random() * 0.5 + 0.35),
+      vx: (Math.random() - 0.5) * 0.35,
+      vy: -(Math.random() * 0.7 + 0.5),
       wobble: Math.random() * Math.PI * 2,
-      r: Math.random() * 16 + 10,
+      r: Math.random() * 22 + 14,
       life: 0,
-      maxLife: Math.random() * 100 + 110,
+      maxLife: Math.random() * 110 + 120,
       color: smokeColor,
     };
   }
 
+  function spawnAmbient() {
+    const useSecondary = Math.random() < 0.4;
+    return {
+      type: 'ambient',
+      x: Math.random() * width,
+      y: height + Math.random() * 80,
+      vx: (Math.random() - 0.5) * 0.15,
+      vy: -(Math.random() * 0.25 + 0.12),
+      wobble: Math.random() * Math.PI * 2,
+      r: Math.random() * 50 + 40,
+      life: 0,
+      maxLife: Math.random() * 260 + 260,
+      color: useSecondary ? secondaryColor : smokeColor,
+    };
+  }
+
   function step() {
-    if (particles.length < 80) {
-      particles.push(spawn());
-      particles.push(spawn());
+    const plumeCount = particles.filter((p) => p.type === 'plume').length;
+    const ambientCount = particles.filter((p) => p.type === 'ambient').length;
+    if (plumeCount < 90) {
+      particles.push(spawnPlume());
+      particles.push(spawnPlume());
     }
+    if (ambientCount < 22) particles.push(spawnAmbient());
+
     ctx.clearRect(0, 0, width, height);
     particles.forEach((p) => {
       p.life++;
-      p.wobble += 0.05;
-      p.x += p.vx + Math.sin(p.wobble) * 0.35;
-      p.y += p.vy;
-      p.vy *= 0.997;
+      p.wobble += 0.045;
+      let vx = p.vx + Math.sin(p.wobble) * (p.type === 'plume' ? 0.4 : 0.12);
+      let vy = p.vy;
+      if (mouse.x !== null) {
+        const dx = p.x - mouse.x;
+        const dy = p.y - mouse.y;
+        const dist = Math.hypot(dx, dy);
+        const radius = p.type === 'plume' ? 160 : 220;
+        if (dist < radius && dist > 0.001) {
+          const force = ((radius - dist) / radius) * (p.type === 'plume' ? 1.4 : 0.6);
+          vx += (dx / dist) * force;
+          vy += (dy / dist) * force * 0.6;
+        }
+      }
+      p.x += vx;
+      p.y += vy;
+      p.vy *= 0.998;
       const t = p.life / p.maxLife;
-      const alpha = t < 0.12 ? t / 0.12 : Math.max(0, 1 - (t - 0.12) / 0.88);
-      const radius = p.r * (0.6 + t * 1.8);
+      const fadeIn = p.type === 'plume' ? 0.12 : 0.2;
+      const alpha = t < fadeIn ? t / fadeIn : Math.max(0, 1 - (t - fadeIn) / (1 - fadeIn));
+      const growth = p.type === 'plume' ? 1.8 : 1.3;
+      const radius = p.r * (0.6 + t * growth);
+      const peak = p.type === 'plume' ? 0.65 : 0.22;
       const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, radius);
-      grad.addColorStop(0, `rgba(${p.color}, ${alpha * 0.65})`);
+      grad.addColorStop(0, `rgba(${p.color}, ${alpha * peak})`);
       grad.addColorStop(1, `rgba(${p.color}, 0)`);
       ctx.fillStyle = grad;
       ctx.beginPath();
       ctx.arc(p.x, p.y, radius, 0, Math.PI * 2);
       ctx.fill();
     });
-    particles = particles.filter((p) => p.life < p.maxLife && p.y > -60);
+    particles = particles.filter((p) => p.life < p.maxLife && p.y > -80);
     requestAnimationFrame(step);
   }
 
@@ -79,23 +118,68 @@ const heroSmoke = (function () {
     return `${r},${g},${b}`;
   }
 
+  heroSection.addEventListener('mousemove', (e) => {
+    const rect = heroSection.getBoundingClientRect();
+    mouse.x = e.clientX - rect.left;
+    mouse.y = e.clientY - rect.top;
+  });
+  heroSection.addEventListener('mouseleave', () => {
+    mouse.x = null;
+    mouse.y = null;
+  });
+
   window.addEventListener('resize', resize);
   resize();
   requestAnimationFrame(step);
 
   return {
-    setColor(hex) {
+    setColor(hex, secondaryHex) {
       smokeColor = hexToRgbString(hex);
+      if (secondaryHex) secondaryColor = hexToRgbString(secondaryHex);
     },
   };
 })();
 
+/* ---------- Hero jar parallax: gently tilts toward the cursor ---------- */
+(function heroParallax() {
+  const heroSection = document.querySelector('.hero');
+  const jarWrap = document.getElementById('hero-jar-wrap');
+  if (!heroSection || !jarWrap) return;
+
+  let targetX = 0, targetY = 0, curX = 0, curY = 0;
+
+  heroSection.addEventListener('mousemove', (e) => {
+    const rect = heroSection.getBoundingClientRect();
+    const nx = (e.clientX - rect.left) / rect.width - 0.5;
+    const ny = (e.clientY - rect.top) / rect.height - 0.5;
+    targetX = nx * 16;
+    targetY = -ny * 16;
+  });
+  heroSection.addEventListener('mouseleave', () => {
+    targetX = 0;
+    targetY = 0;
+  });
+
+  function loop() {
+    curX += (targetX - curX) * 0.08;
+    curY += (targetY - curY) * 0.08;
+    jarWrap.style.setProperty('--tilt-y', curX.toFixed(2) + 'deg');
+    jarWrap.style.setProperty('--tilt-x', curY.toFixed(2) + 'deg');
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+})();
+
 /* ---------- Hero: cycling featured candle showcase ---------- */
 const heroCandles = PRODUCTS.slice(0, 6);
+const heroSectionEl = document.querySelector('.hero');
+const heroStageEl = document.querySelector('.hero-stage');
 const heroJarEl = document.getElementById('hero-jar');
 const heroNameEl = document.getElementById('hero-name');
 const heroTagEl = document.getElementById('hero-tag');
 const heroDotsEl = document.getElementById('hero-dots');
+const heroFlashEl = document.getElementById('hero-flash');
+const heroAccents = ['#5be3ff', '#ff5fb8', '#8b7fc7', '#4fffb0', '#ffd76c', '#ff6c6c'];
 
 heroCandles.forEach((_, i) => {
   const dot = document.createElement('span');
@@ -112,18 +196,26 @@ function showHeroCandle(index, userTriggered) {
   const c = heroCandles[heroIndex];
 
   heroNameEl.classList.add('glitching');
+  heroStageEl.classList.add('glitching');
   heroTagEl.style.opacity = 0;
+  heroFlashEl.classList.remove('pulse');
+  void heroFlashEl.offsetWidth;
+  heroFlashEl.classList.add('pulse');
 
   setTimeout(() => {
-    heroJarEl.innerHTML = renderJar(c.color, { flameSize: 30 });
+    heroJarEl.innerHTML = renderJar(c.color, { flameSize: 34 });
     heroNameEl.textContent = c.name;
     heroNameEl.dataset.text = c.name;
     heroTagEl.textContent = `${c.category} · ${c.notes}`;
     heroTagEl.style.opacity = 1;
-    heroSmoke.setColor(c.color);
-  }, 150);
+    heroSectionEl.style.setProperty('--hero-color', c.color);
+    heroSmoke.setColor(c.color, heroAccents[heroIndex % heroAccents.length]);
+  }, 180);
 
-  setTimeout(() => heroNameEl.classList.remove('glitching'), 500);
+  setTimeout(() => {
+    heroNameEl.classList.remove('glitching');
+    heroStageEl.classList.remove('glitching');
+  }, 700);
 
   [...heroDotsEl.children].forEach((d, i) => d.classList.toggle('active', i === heroIndex));
 
@@ -136,7 +228,7 @@ function showHeroCandle(index, userTriggered) {
 function startHeroTimer() {
   heroTimer = setInterval(() => {
     showHeroCandle((heroIndex + 1) % heroCandles.length);
-  }, 4200);
+  }, 4400);
 }
 
 showHeroCandle(0);
