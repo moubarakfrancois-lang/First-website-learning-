@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Page Not Found — Candleist</title>
+<meta name="robots" content="noindex" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="stylesheet" href="style.css" />
+<style>
+  .notfound {
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 20px;
+  }
+  .notfound .flame { --size: 60px; margin-bottom: 30px; }
+  .notfound h1 { font-family: var(--serif); font-size: clamp(2rem, 6vw, 3.4rem); margin: 0 0 16px; }
+  .notfound p { color: var(--muted); margin-bottom: 34px; max-width: 420px; }
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+
+<main class="notfound">
+  <div class="flame"><span class="flame-core"></span></div>
+  <h1>This candle burned out</h1>
+  <p>The page you're looking for doesn't exist — it may have been moved, renamed, or never lit in the first place.</p>
+  <a href="/First-website-learning-/" class="btn btn-primary">Back to Candleist</a>
+</main>
+
+<script src="shared.js"></script>
+</body>
+</html>
