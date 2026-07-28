@@ -1,4 +1,6 @@
 /* Product detail page */
+import { createCandleScene } from './candle3d.js';
+
 const params = new URLSearchParams(location.search);
 const product = getProduct(params.get('id')) || PRODUCTS[0];
 document.title = `${product.name} — Candleist`;
@@ -8,7 +10,7 @@ let qty = 1;
 
 function renderDetail() {
   document.getElementById('product-detail').innerHTML = `
-    ${renderJar(product.color, { flameSize: 30 })}
+    <div class="pd-jar-3d" id="pd-jar"></div>
     <div class="pd-info">
       <p class="pd-cat">${product.category}</p>
       <h1 class="pd-name">${product.name}</h1>
@@ -72,6 +74,12 @@ function renderDetail() {
   });
 }
 renderDetail();
+
+createCandleScene(document.getElementById('pd-jar'), {
+  waxColor: product.color,
+  interactive: true,
+  autoSpin: true,
+});
 
 /* Related products: same category, excluding current */
 const related = PRODUCTS.filter((p) => p.category === product.category && p.id !== product.id).slice(0, 4);

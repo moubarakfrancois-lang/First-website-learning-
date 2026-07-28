@@ -1,4 +1,5 @@
 /* Home page rendering */
+import { createCandleScene } from './candle3d.js';
 
 /* ---------- Hero smoke: colored particle atmosphere + plume rising from the flame ---------- */
 const heroSmoke = (function () {
@@ -25,11 +26,11 @@ const heroSmoke = (function () {
   }
 
   function sourcePoint() {
-    const flameEl = document.querySelector('#hero-jar .flame');
+    const jarEl = document.getElementById('hero-jar');
     const heroRect = heroSection.getBoundingClientRect();
-    if (!flameEl) return { x: width / 2, y: height * 0.3 };
-    const fr = flameEl.getBoundingClientRect();
-    return { x: fr.left + fr.width / 2 - heroRect.left, y: fr.top - heroRect.top };
+    if (!jarEl) return { x: width / 2, y: height * 0.3 };
+    const jr = jarEl.getBoundingClientRect();
+    return { x: jr.left + jr.width / 2 - heroRect.left, y: jr.top - heroRect.top + jr.height * 0.18 };
   }
 
   function spawnPlume() {
@@ -140,41 +141,17 @@ const heroSmoke = (function () {
   };
 })();
 
-/* ---------- Hero jar parallax: gently tilts toward the cursor ---------- */
-(function heroParallax() {
-  const heroSection = document.querySelector('.hero');
-  const jarWrap = document.getElementById('hero-jar-wrap');
-  if (!heroSection || !jarWrap) return;
-
-  let targetX = 0, targetY = 0, curX = 0, curY = 0;
-
-  heroSection.addEventListener('mousemove', (e) => {
-    const rect = heroSection.getBoundingClientRect();
-    const nx = (e.clientX - rect.left) / rect.width - 0.5;
-    const ny = (e.clientY - rect.top) / rect.height - 0.5;
-    targetX = nx * 16;
-    targetY = -ny * 16;
-  });
-  heroSection.addEventListener('mouseleave', () => {
-    targetX = 0;
-    targetY = 0;
-  });
-
-  function loop() {
-    curX += (targetX - curX) * 0.08;
-    curY += (targetY - curY) * 0.08;
-    jarWrap.style.setProperty('--tilt-y', curX.toFixed(2) + 'deg');
-    jarWrap.style.setProperty('--tilt-x', curY.toFixed(2) + 'deg');
-    requestAnimationFrame(loop);
-  }
-  requestAnimationFrame(loop);
-})();
+/* ---------- Hero: real WebGL 3D candle (glass jar, animated flame, mouse parallax) ---------- */
+const heroCandleScene = createCandleScene(document.getElementById('hero-jar'), {
+  waxColor: PRODUCTS[0].color,
+  interactive: true,
+  autoSpin: true,
+});
 
 /* ---------- Hero: cycling featured candle showcase ---------- */
 const heroCandles = PRODUCTS.slice(0, 6);
 const heroSectionEl = document.querySelector('.hero');
 const heroStageEl = document.querySelector('.hero-stage');
-const heroJarEl = document.getElementById('hero-jar');
 const heroNameEl = document.getElementById('hero-name');
 const heroTagEl = document.getElementById('hero-tag');
 const heroDotsEl = document.getElementById('hero-dots');
@@ -203,7 +180,7 @@ function showHeroCandle(index, userTriggered) {
   heroFlashEl.classList.add('pulse');
 
   setTimeout(() => {
-    heroJarEl.innerHTML = renderJar(c.color, { flameSize: 34 });
+    heroCandleScene.setColor(c.color);
     heroNameEl.textContent = c.name;
     heroNameEl.dataset.text = c.name;
     heroTagEl.textContent = `${c.category} · ${c.notes}`;

@@ -563,14 +563,15 @@ main { position: relative; z-index: 1; padding-top: 84px; }
   position: relative;
   z-index: 2;
   width: clamp(240px, 32vw, 420px);
+  aspect-ratio: 3 / 4;
   animation: heroFloat 5s ease-in-out infinite;
   filter: drop-shadow(0 40px 60px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 70px var(--hero-color, var(--accent)));
-  transition: transform 0.25s ease-out, filter 1s ease;
+  transition: filter 1s ease;
   will-change: transform;
 }
 @keyframes heroFloat {
-  0%, 100% { transform: translateY(0) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)); }
-  50% { transform: translateY(-14px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)); }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-14px); }
 }
 
 /* Glowing platform the candle appears to rest on, echoing the neon-road look */
@@ -993,6 +994,13 @@ main { position: relative; z-index: 1; padding-top: 84px; }
   align-items: start;
 }
 .product-detail .jar { max-width: 380px; margin: 0 auto; }
+.pd-jar-3d {
+  width: 100%;
+  max-width: 380px;
+  aspect-ratio: 3 / 4;
+  margin: 0 auto;
+  filter: drop-shadow(0 30px 50px rgba(0, 0, 0, 0.5));
+}
 .pd-cat { font-size: 12px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); margin-bottom: 10px; }
 .pd-name { font-family: var(--serif); font-size: clamp(2rem, 4vw, 3rem); margin: 0 0 14px; }
 .pd-notes { color: var(--muted); line-height: 1.7; margin-bottom: 26px; max-width: 480px; }
