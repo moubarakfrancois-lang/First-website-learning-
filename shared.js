@@ -1,5 +1,132 @@
 /* Shared across every page: preloader, header/nav wiring, ember background, toast, jar illustration. */
 
+/* ---------- Sitewide ambient atmosphere (persists on every page, not just the hero) ---------- */
+(function siteAurora() {
+  document.body.insertAdjacentHTML(
+    'afterbegin',
+    `<div class="site-aurora" aria-hidden="true">
+      <div class="site-blob site-blob-a"></div>
+      <div class="site-blob site-blob-b"></div>
+      <div class="site-blob site-blob-c"></div>
+    </div>`
+  );
+})();
+
+/* ---------- Custom reactive cursor ---------- */
+(function customCursor() {
+  if (window.matchMedia('(pointer: coarse)').matches) return; // skip on touch devices
+  const dot = document.createElement('div');
+  dot.id = 'cursor-dot';
+  document.body.appendChild(dot);
+
+  let x = window.innerWidth / 2, y = window.innerHeight / 2, cx = x, cy = y;
+  document.addEventListener('mousemove', (e) => {
+    x = e.clientX;
+    y = e.clientY;
+    dot.classList.add('visible');
+  });
+  document.addEventListener('mouseleave', () => dot.classList.remove('visible'));
+
+  document.addEventListener('mouseover', (e) => {
+    if (e.target.closest('a, button, .product-card, input, select, .filter-chip')) {
+      dot.classList.add('hovering');
+    }
+  });
+  document.addEventListener('mouseout', (e) => {
+    if (e.target.closest('a, button, .product-card, input, select, .filter-chip')) {
+      dot.classList.remove('hovering');
+    }
+  });
+
+  function loop() {
+    cx += (x - cx) * 0.18;
+    cy += (y - cy) * 0.18;
+    dot.style.transform = `translate(${cx}px, ${cy}px)`;
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+})();
+
+/* ---------- Scroll reveal: sections and cards animate in as they enter view ---------- */
+(function scrollReveal() {
+  const revealObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0, rootMargin: '0px 0px -10% 0px' }
+  );
+
+  function markAndObserve(root) {
+    root.querySelectorAll('.page-section:not(.reveal), .bundle-card:not(.reveal)').forEach((el) => {
+      el.classList.add('reveal');
+      revealObserver.observe(el);
+    });
+  }
+
+  markAndObserve(document);
+
+  const mo = new MutationObserver((mutations) => {
+    for (const m of mutations) {
+      m.addedNodes.forEach((node) => {
+        if (node.nodeType !== 1) return;
+        if (node.matches && node.matches('.bundle-card')) {
+          node.classList.add('reveal');
+          revealObserver.observe(node);
+        } else if (node.querySelectorAll) {
+          markAndObserve(node);
+        }
+      });
+    }
+  });
+  mo.observe(document.body, { childList: true, subtree: true });
+})();
+
+/* ---------- Product card 3D tilt on hover ---------- */
+(function cardTilt() {
+  function wireTilt(card) {
+    if (card.dataset.tiltWired) return;
+    card.dataset.tiltWired = 'true';
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const px = (e.clientX - rect.left) / rect.width - 0.5;
+      const py = (e.clientY - rect.top) / rect.height - 0.5;
+      card.style.setProperty('--tilt-x', (-py * 10).toFixed(2) + 'deg');
+      card.style.setProperty('--tilt-y', (px * 10).toFixed(2) + 'deg');
+      card.style.setProperty('--glow-x', `${px * 100 + 50}%`);
+      card.style.setProperty('--glow-y', `${py * 100 + 50}%`);
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.setProperty('--tilt-x', '0deg');
+      card.style.setProperty('--tilt-y', '0deg');
+    });
+  }
+
+  function wireAll(root) {
+    root.querySelectorAll('.product-card, .bundle-card').forEach(wireTilt);
+  }
+
+  wireAll(document);
+
+  const mo = new MutationObserver((mutations) => {
+    for (const m of mutations) {
+      m.addedNodes.forEach((node) => {
+        if (node.nodeType !== 1) return;
+        if (node.matches && (node.matches('.product-card') || node.matches('.bundle-card'))) {
+          wireTilt(node);
+        } else if (node.querySelectorAll) {
+          wireAll(node);
+        }
+      });
+    }
+  });
+  mo.observe(document.body, { childList: true, subtree: true });
+})();
+
 function renderJar(color, opts = {}) {
   const flameSize = opts.flameSize || 20;
   const delay = opts.delay || 0;
