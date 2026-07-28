@@ -210,6 +210,14 @@ function showHeroCandle(index, userTriggered) {
     heroTagEl.style.opacity = 1;
     heroSectionEl.style.setProperty('--hero-color', c.color);
     heroSmoke.setColor(c.color, heroAccents[heroIndex % heroAccents.length]);
+
+    const burnEl = document.querySelector('#float-burn strong');
+    if (burnEl) burnEl.textContent = c.burnTime;
+    document.querySelectorAll('.float-card').forEach((card) => {
+      card.style.animation = 'none';
+      void card.offsetWidth;
+      card.style.animation = '';
+    });
   }, 180);
 
   setTimeout(() => {
