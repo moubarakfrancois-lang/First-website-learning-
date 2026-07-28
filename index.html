@@ -50,18 +50,23 @@
 
 <main>
   <section class="hero">
+    <canvas id="hero-smoke"></canvas>
     <div class="hero-glow"></div>
-    <div class="hero-grid">
-      <div class="hero-copy">
-        <p class="eyebrow">Hand-Poured · Small Batch</p>
-        <h1>Light something <em>slower</em>.</h1>
-        <p>Soy wax, cotton wicks, and scents built to fill a room without fighting it. Candleist candles are poured in small batches — no shortcuts, no synthetic haze.</p>
-        <div class="hero-actions">
-          <a href="shop.html" class="btn btn-primary">Shop All Candles</a>
-          <a href="shop.html#bundles" class="btn btn-ghost">See Bundles</a>
-        </div>
+    <div class="hero-stage">
+      <p class="eyebrow">Featured Scent</p>
+      <div class="hero-jar-showcase" id="hero-jar"></div>
+      <h1 class="glitch-title" id="hero-name" data-text="">&nbsp;</h1>
+      <p class="hero-scent-tag" id="hero-tag">&nbsp;</p>
+      <div class="hero-dots" id="hero-dots"></div>
+      <p class="hero-lede">Soy wax, cotton wicks, and scents built to fill a room without fighting it. Candleist candles are poured in small batches — no shortcuts, no synthetic haze.</p>
+      <div class="hero-actions">
+        <a href="shop.html" class="btn btn-primary">Shop All Candles</a>
+        <a href="shop.html#bundles" class="btn btn-ghost">See Bundles</a>
       </div>
-      <div class="hero-stage-visual" id="hero-jar"></div>
+    </div>
+    <div class="scroll-hint">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
     </div>
   </section>
 

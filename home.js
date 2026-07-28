@@ -1,5 +1,146 @@
 /* Home page rendering */
-document.getElementById('hero-jar').innerHTML = renderJar(PRODUCTS[0].color, { flameSize: 26 });
+
+/* ---------- Hero smoke: colored particle plume rising from the flame ---------- */
+const heroSmoke = (function () {
+  const canvas = document.getElementById('hero-smoke');
+  const heroSection = document.querySelector('.hero');
+  if (!canvas || !heroSection) return { setColor() {} };
+
+  const ctx = canvas.getContext('2d');
+  let width, height, dpr;
+  let particles = [];
+  let smokeColor = '255,138,61';
+
+  function resize() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    width = heroSection.clientWidth;
+    height = heroSection.clientHeight;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    canvas.style.width = width + 'px';
+    canvas.style.height = height + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function sourcePoint() {
+    const flameEl = document.querySelector('#hero-jar .flame');
+    const heroRect = heroSection.getBoundingClientRect();
+    if (!flameEl) return { x: width / 2, y: height * 0.3 };
+    const fr = flameEl.getBoundingClientRect();
+    return { x: fr.left + fr.width / 2 - heroRect.left, y: fr.top - heroRect.top };
+  }
+
+  function spawn() {
+    const p = sourcePoint();
+    return {
+      x: p.x + (Math.random() - 0.5) * 16,
+      y: p.y,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: -(Math.random() * 0.5 + 0.35),
+      wobble: Math.random() * Math.PI * 2,
+      r: Math.random() * 16 + 10,
+      life: 0,
+      maxLife: Math.random() * 100 + 110,
+      color: smokeColor,
+    };
+  }
+
+  function step() {
+    if (particles.length < 80) {
+      particles.push(spawn());
+      particles.push(spawn());
+    }
+    ctx.clearRect(0, 0, width, height);
+    particles.forEach((p) => {
+      p.life++;
+      p.wobble += 0.05;
+      p.x += p.vx + Math.sin(p.wobble) * 0.35;
+      p.y += p.vy;
+      p.vy *= 0.997;
+      const t = p.life / p.maxLife;
+      const alpha = t < 0.12 ? t / 0.12 : Math.max(0, 1 - (t - 0.12) / 0.88);
+      const radius = p.r * (0.6 + t * 1.8);
+      const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, radius);
+      grad.addColorStop(0, `rgba(${p.color}, ${alpha * 0.65})`);
+      grad.addColorStop(1, `rgba(${p.color}, 0)`);
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, radius, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    particles = particles.filter((p) => p.life < p.maxLife && p.y > -60);
+    requestAnimationFrame(step);
+  }
+
+  function hexToRgbString(hex) {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return `${r},${g},${b}`;
+  }
+
+  window.addEventListener('resize', resize);
+  resize();
+  requestAnimationFrame(step);
+
+  return {
+    setColor(hex) {
+      smokeColor = hexToRgbString(hex);
+    },
+  };
+})();
+
+/* ---------- Hero: cycling featured candle showcase ---------- */
+const heroCandles = PRODUCTS.slice(0, 6);
+const heroJarEl = document.getElementById('hero-jar');
+const heroNameEl = document.getElementById('hero-name');
+const heroTagEl = document.getElementById('hero-tag');
+const heroDotsEl = document.getElementById('hero-dots');
+
+heroCandles.forEach((_, i) => {
+  const dot = document.createElement('span');
+  dot.className = 'dot' + (i === 0 ? ' active' : '');
+  dot.addEventListener('click', () => showHeroCandle(i, true));
+  heroDotsEl.appendChild(dot);
+});
+
+let heroIndex = 0;
+let heroTimer;
+
+function showHeroCandle(index, userTriggered) {
+  heroIndex = index;
+  const c = heroCandles[heroIndex];
+
+  heroNameEl.classList.add('glitching');
+  heroTagEl.style.opacity = 0;
+
+  setTimeout(() => {
+    heroJarEl.innerHTML = renderJar(c.color, { flameSize: 30 });
+    heroNameEl.textContent = c.name;
+    heroNameEl.dataset.text = c.name;
+    heroTagEl.textContent = `${c.category} · ${c.notes}`;
+    heroTagEl.style.opacity = 1;
+    heroSmoke.setColor(c.color);
+  }, 150);
+
+  setTimeout(() => heroNameEl.classList.remove('glitching'), 500);
+
+  [...heroDotsEl.children].forEach((d, i) => d.classList.toggle('active', i === heroIndex));
+
+  if (userTriggered) {
+    clearInterval(heroTimer);
+    startHeroTimer();
+  }
+}
+
+function startHeroTimer() {
+  heroTimer = setInterval(() => {
+    showHeroCandle((heroIndex + 1) % heroCandles.length);
+  }, 4200);
+}
+
+showHeroCandle(0);
+startHeroTimer();
 
 /* Marquee of scent names */
 const marqueeNames = PRODUCTS.map((p) => p.name);
