@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VOID STUDIO — Creative Digital Experiences</title>
+<meta name="description" content="VOID STUDIO builds websites, installations, XR/VR/AI experiences, multiplayer worlds and games." />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Preloader -->
+  <div id="preloader">
+    <span id="preloader-count">0</span>
+  </div>
+
+  <!-- Fixed background canvas -->
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- Header -->
+  <header id="header">
+    <a href="#home" class="logo" aria-label="VOID STUDIO — home">
+      <svg viewBox="0 0 60 60" width="34" height="34">
+        <circle cx="30" cy="30" r="27" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M18 22 L30 40 L42 22" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      </svg>
+    </a>
+
+    <nav class="pill-nav">
+      <a href="#work">Work</a>
+      <span class="dash">———</span>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <button id="menu-toggle" aria-label="Toggle menu">
+      <span></span><span></span>
+    </button>
+  </header>
+
+  <!-- Left sidebar -->
+  <aside id="sidebar">
+    <p class="sidebar-title">What are you looking for?</p>
+    <ul class="sidebar-list">
+      <li><a href="#work" data-filter="websites">Websites</a></li>
+      <li><a href="#work" data-filter="installations">Installations</a></li>
+      <li><a href="#work" data-filter="xrvrai">XR / VR / AI</a></li>
+      <li><a href="#work" data-filter="multiplayer">Multiplayer</a></li>
+      <li><a href="#work" data-filter="games">Games</a></li>
+    </ul>
+    <form id="ask-form" autocomplete="off">
+      <input type="text" id="ask-input" placeholder="Ask me anything…" />
+    </form>
+  </aside>
+
+  <main>
+    <!-- Hero -->
+    <section id="home" class="hero">
+      <div class="hero-copy">
+        <h1 id="hero-title">Welcome to<br><span id="hero-cycle">VOID STUDIO</span></h1>
+        <p class="hero-sub">We design and build worlds — for the web, for headsets, for screens that don't exist yet.</p>
+      </div>
+      <div class="scroll-hint">
+        <span>Scroll</span>
+        <div class="scroll-line"></div>
+      </div>
+    </section>
+
+    <!-- Work -->
+    <section id="work" class="work">
+      <h2 class="section-heading"><span>01</span> Selected Work</h2>
+      <div class="grid" id="work-grid">
+        <!-- injected by JS -->
+      </div>
+    </section>
+
+    <!-- About / stats -->
+    <section id="about" class="about">
+      <h2 class="section-heading"><span>02</span> Who We Are</h2>
+      <p class="about-text">
+        VOID STUDIO is a small collective of designers and engineers obsessed with
+        the edges of what a browser can do. We prototype fast, sweat every frame,
+        and ship experiences that feel like nothing else on the internet.
+      </p>
+      <div class="stats">
+        <div class="stat"><strong data-count="120">0</strong><span>Projects shipped</span></div>
+        <div class="stat"><strong data-count="18">0</strong><span>Awards</span></div>
+        <div class="stat"><strong data-count="9">0</strong><span>Years running</span></div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="contact">
+      <h2 class="section-heading"><span>03</span> Let's Talk</h2>
+      <a class="big-link" href="mailto:hello@voidstudio.example">hello@voidstudio.example</a>
+      <div class="socials">
+        <a href="#" target="_blank" rel="noopener">Instagram</a>
+        <a href="#" target="_blank" rel="noopener">Twitter / X</a>
+        <a href="#" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </section>
+
+    <footer>
+      <p>&copy; <span id="year"></span> VOID STUDIO. All rights reserved.</p>
+    </footer>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
