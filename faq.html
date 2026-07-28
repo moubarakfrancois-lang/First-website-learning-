@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Candleist — Hand-Poured Candles</title>
-<meta name="description" content="Candleist — small-batch, hand-poured soy candles. Shop scents, bundles, and gifts." />
+<title>FAQ — Candleist</title>
+<meta name="description" content="Frequently asked questions about Candleist candles: shipping, safety, ingredients, and returns." />
 <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -41,48 +41,15 @@
 </nav>
 
 <main>
-  <section class="hero">
-    <div class="hero-glow"></div>
-    <div class="hero-grid">
-      <div class="hero-copy">
-        <p class="eyebrow">Hand-Poured · Small Batch</p>
-        <h1>Light something <em>slower</em>.</h1>
-        <p>Soy wax, cotton wicks, and scents built to fill a room without fighting it. Candleist candles are poured in small batches — no shortcuts, no synthetic haze.</p>
-        <div class="hero-actions">
-          <a href="shop.html" class="btn btn-primary">Shop All Candles</a>
-          <a href="shop.html#bundles" class="btn btn-ghost">See Bundles</a>
-        </div>
-      </div>
-      <div class="hero-stage-visual" id="hero-jar"></div>
-    </div>
-  </section>
-
-  <div class="marquee">
-    <div class="marquee-track" id="marquee-track"></div>
-  </div>
-
-  <section class="page-section" id="featured">
-    <div class="container">
-      <h2 class="section-heading">This Week's Favorites</h2>
-      <div class="filter-bar" id="home-filter-bar"></div>
-      <div class="product-grid" id="featured-grid"></div>
-    </div>
-  </section>
-
-  <section class="page-section" id="bundles" style="background:var(--bg-alt)">
-    <div class="container">
-      <p class="eyebrow">Bundle &amp; Save</p>
-      <h2 class="section-heading">Curated sets, better price</h2>
-      <div class="bundle-grid" id="bundle-grid"></div>
-    </div>
-  </section>
-
   <section class="page-section">
-    <div class="container" style="text-align:center;max-width:640px;margin:0 auto;">
-      <p class="eyebrow">Why Candleist</p>
-      <h2 class="section-heading">Clean-burning, honestly priced</h2>
-      <p style="color:var(--muted);margin-bottom:40px;">100% soy wax, lead-free cotton wicks, and phthalate-free fragrance oils. Every candle is burn-tested for 40+ hours before it ships.</p>
-      <a href="faq.html" class="btn btn-ghost">Read the FAQ</a>
+    <div class="container">
+      <p class="eyebrow">Good to Know</p>
+      <h1 class="section-heading">Frequently Asked Questions</h1>
+
+      <div class="faq-list" id="faq-general"></div>
+
+      <h2 class="section-heading" id="shipping" style="margin-top:70px;font-size:1.6rem;">Shipping &amp; Returns</h2>
+      <div class="faq-list" id="faq-shipping"></div>
     </div>
   </section>
 </main>
@@ -96,7 +63,7 @@
     <div class="footer-col">
       <h4>Shop</h4>
       <a href="shop.html">All Candles</a>
-      <a href="index.html#bundles">Bundles</a>
+      <a href="shop.html#bundles-section">Bundles</a>
       <a href="shop.html">New Arrivals</a>
     </div>
     <div class="footer-col">
@@ -121,6 +88,6 @@
 <script src="products.js"></script>
 <script src="cart.js"></script>
 <script src="shared.js"></script>
-<script src="home.js"></script>
+<script src="faq.js"></script>
 </body>
 </html>
