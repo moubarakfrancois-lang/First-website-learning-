@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Your Cart — Candleist</title>
-<meta name="description" content="Review your cart and check out at Candleist." />
+<title>Build Your Candle — Candleist</title>
+<meta name="description" content="See how a Candleist candle is made, then build your own — pick a scent, a size, and light it." />
 <link rel="icon" type="image/svg+xml" href="favicon.svg" />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Candleist" />
-<meta property="og:title" content="Your Cart — Candleist" />
-<meta property="og:description" content="Review your cart and check out at Candleist." />
+<meta property="og:title" content="Build Your Candle — Candleist" />
+<meta property="og:description" content="See how a Candleist candle is made, then build your own." />
 <meta property="og:image" content="https://moubarakfrancois-lang.github.io/First-website-learning-/og-image.png" />
-<meta property="og:url" content="https://moubarakfrancois-lang.github.io/First-website-learning-/cart.html" />
+<meta property="og:url" content="https://moubarakfrancois-lang.github.io/First-website-learning-/build.html" />
 <meta name="twitter:card" content="summary_large_image" />
 <link rel="stylesheet" href="style.css" />
 </head>
@@ -19,6 +19,7 @@
 
 <div id="preloader"><div class="flame" style="--size:32px"><span class="flame-core"></span></div></div>
 <canvas id="bg-canvas"></canvas>
+<canvas id="build-canvas" class="build-fixed-canvas"></canvas>
 
 <header id="header">
   <a href="index.html" class="logo"><span class="flame" style="--size:22px"><span class="flame-core"></span></span> Candleist</a>
@@ -44,19 +45,60 @@
 <nav id="mobile-nav">
   <a href="index.html">Home</a>
   <a href="shop.html">Shop</a>
-    <a href="build.html">Build</a>
+  <a href="build.html">Build</a>
   <a href="faq.html">FAQ</a>
   <a href="signin.html">Account</a>
   <a href="cart.html">Cart</a>
 </nav>
 
 <main>
-  <section class="page-section">
+  <section class="build-intro">
+    <p class="eyebrow">How It's Made</p>
+    <h1>From raw wax<br /><em>to lit candle.</em></h1>
+    <p class="hero-lede">Scroll to walk through how every Candleist candle comes together — then build your own.</p>
+    <div class="scroll-hint">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <section class="build-room" id="room-a">
+    <div class="build-room-text reveal">
+      <p class="eyebrow">Chapter One</p>
+      <h2>Sourced With Care</h2>
+      <p>100% soy wax, cotton wicks, and real essential oils — no paraffin, no synthetic fillers, nothing we wouldn't burn in our own homes.</p>
+    </div>
+  </section>
+
+  <section class="build-room" id="room-b">
+    <div class="build-room-text reveal">
+      <p class="eyebrow">Chapter Two</p>
+      <h2>Poured By Hand</h2>
+      <p>Every jar is hand-poured in small batches, hand-wicked, and cured for 48 hours before it's ever boxed up.</p>
+    </div>
+  </section>
+
+  <section class="page-section" id="configurator">
     <div class="container">
-      <h1 class="section-heading">Your Cart</h1>
-      <div class="cart-layout">
-        <div id="cart-items"><!-- injected --></div>
-        <div class="summary-card" id="cart-summary"><!-- injected --></div>
+      <p class="eyebrow">Chapter Three</p>
+      <h2 class="section-heading">Build Your Candle</h2>
+      <div class="configurator-layout">
+        <div class="configurator-stage-wrap">
+          <div class="configurator-stage" id="config-jar"></div>
+        </div>
+        <div class="configurator-panel">
+          <h3 class="config-name" id="config-name">&nbsp;</h3>
+          <p class="config-notes" id="config-notes">&nbsp;</p>
+
+          <h4 class="config-label">Choose a Scent</h4>
+          <div class="scent-swatches" id="scent-swatches"></div>
+
+          <h4 class="config-label">Choose a Size</h4>
+          <div class="size-options" id="config-sizes"></div>
+
+          <p class="configurator-price" id="config-price"></p>
+          <button class="btn btn-primary btn-block" id="config-add">Add to Cart</button>
+        </div>
       </div>
     </div>
   </section>
@@ -72,7 +114,7 @@
       <h4>Shop</h4>
       <a href="shop.html">All Candles</a>
       <a href="shop.html#bundles">Bundles</a>
-      <a href="shop.html">New Arrivals</a>
+      <a href="build.html">Build Your Candle</a>
     </div>
     <div class="footer-col">
       <h4>Support</h4>
@@ -96,6 +138,6 @@
 <script src="products.js"></script>
 <script src="cart.js"></script>
 <script src="shared.js"></script>
-<script src="cart-page.js"></script>
+<script type="module" src="build.js"></script>
 </body>
 </html>
